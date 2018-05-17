@@ -1,0 +1,3 @@
+function spectralCentroid(fftFrame)
+    
+end
