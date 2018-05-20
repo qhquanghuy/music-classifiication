@@ -13,7 +13,7 @@ function features = extractFeature(filename)
         frame = io();
         frame = frame(:,1);
         feature = extractFrameFeature(frame, songInfo.SampleRate);
-        features = [features; feature];
+        features = [features; standardize(feature)];
     end
     
     
