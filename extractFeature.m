@@ -1,10 +1,22 @@
-
-
-function feature = extractFeature(frame, fs)
-    fftFrames = windowing(frame,1024,512, @(window) fft(window));
-    rmsVal = rms(frame);
-    rollOffF = mean(map2(fftFrames, @(fftFrame) spectralRollOff(fftFrame, fs)));
-    centroid = mean(map2(fftFrames, @(fftFrame) spectralCentroid(fftFrame, fs)));
-    flux = mean(spectralFlux(fftFrames));
-    feature = [rmsVal rollOffF centroid flux];
+function [features, classes] = extractFeature(filename) 
+%     filename = "shapeofyou.mp3";
+    frameSize = 32768;
+    
+    io = dsp.AudioFileReader(filename,"SamplesPerFrame",frameSize);
+    
+    songInfo = audioinfo(filename); 
+    totalFrames = floor(songInfo.TotalSamples / frameSize);    
+    
+    features = [];
+    classes = [];
+    for i = 1:totalFrames
+        
+        frame = io();
+        frame = frame(:,1);
+        feature = extractFrameFeature(frame, songInfo.SampleRate);
+        features = [features; standardize(feature)];
+        classes = [classes; "pop"];
+    end
+    
+    
 end
