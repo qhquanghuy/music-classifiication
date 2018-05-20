@@ -1,4 +1,4 @@
-function [features, classes] = extractFeature(filename) 
+function features = extractFeature(filename) 
 %     filename = "shapeofyou.mp3";
     frameSize = 32768;
     
@@ -8,14 +8,12 @@ function [features, classes] = extractFeature(filename)
     totalFrames = floor(songInfo.TotalSamples / frameSize);    
     
     features = [];
-    classes = [];
     for i = 1:totalFrames
         
         frame = io();
         frame = frame(:,1);
         feature = extractFrameFeature(frame, songInfo.SampleRate);
-        features = [features; standardize(feature)];
-        classes = [classes; "pop"];
+        features = [features; feature];
     end
     
     
