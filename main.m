@@ -11,28 +11,24 @@ function main
 %     for i = 1:totalFrames
         
         frame = io();
-        fftFrame = fftprocess(frame);
+        
+        fftFrames = windowing(frame(:,1),1024,512, @(window) fft(window));
 %         rmsVal = rms(frame);
 %         rollOffPoint = 
-%         centroid = spectralCentroid(fftFrame, songInfo.SampleRate);
+        centroid = mean(map2(fftFrames, @(fftFrame) spectralCentroid(fftFrame, songInfo.SampleRate)));
 %         flux = spectralFlux(fftFrame, songInfo.SampleRate);
 %     end
     
-    
-    function fftSignals = fftprocess(frame)
-        fftSignals = [];
-        windowing(frame(:,1),1024,32, @handle);
+
+    function ys = map2(xs, f)
         
-        function handle(window,curI,totalSteps)
-            if isempty(fftSignals)
-                fftSignals = zeros(1024, totalSteps);
-            end
-            fftSignals(:,curI) = fft(window);
+        [rows, cols] = size(xs);
+        ys = zeros(cols,1);
+        for id = 1 : cols
+            ys(id) = f(xs(:,id));
         end
-
+        
     end
-
-
 
 
 end
