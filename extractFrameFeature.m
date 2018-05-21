@@ -7,10 +7,10 @@ function feature = extractFrameFeature(frame, fs)
     feature = [];
     if ~isempty(fftFrames)
         rmsVal = rms(frame);
-        rollOffF = mean(map2(fftFrames, @(fftFrame) spectralRollOff(fftFrame, fs)));
-        centroid = mean(map2(fftFrames, @(fftFrame) spectralCentroid(fftFrame, fs)));
-        flux = mean(spectralFlux(fftFrames));
-        feature = [rmsVal rollOffF centroid flux];
+        rollOffF = map2(fftFrames, @(fftFrame) spectralRollOff(fftFrame, fs));
+        centroid = map2(fftFrames, @(fftFrame) spectralCentroid(fftFrame, fs));
+        flux = spectralFlux(fftFrames);
+        feature = [rmsVal mean(rollOffF) mean(centroid) mean(flux) std(rollOffF) std(centroid) std(flux)];
     end
     
 end

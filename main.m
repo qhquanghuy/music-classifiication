@@ -19,7 +19,7 @@ function main
     
     knnModel = train(features, classes);
     
-    saveCompactModel(knnModel,"Trained1");
+    saveCompactModel(knnModel,"Trained");
     
     disp("done");
 end
