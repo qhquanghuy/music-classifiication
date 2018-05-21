@@ -1,9 +1,10 @@
-function test
+function test(numberOfNeighbors)
     testFolder = 'Music/Test/';
     files = dir(testFolder);
     predictTable = table;
    
     model = loadCompactModel("Trained");
+    model.NumNeighbors = numberOfNeighbors;
     for idx = 1 : length(files)
         if ~files(idx).isdir
             audioname = files(idx).name;
