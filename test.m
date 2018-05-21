@@ -3,12 +3,13 @@ function test(numberOfNeighbors)
     files = dir(testFolder);
     predictTable = table;
    
-    model = loadCompactModel("Trained");
+    model = loadCompactModel("Trained_F");
     model.NumNeighbors = numberOfNeighbors;
     for idx = 1 : length(files)
         if ~files(idx).isdir
             audioname = files(idx).name;
-                       
+            audioclass = strsplit(audioname,"_");
+            audioclass = string(audioclass(1));           
             feature = extractFeature(strcat(testFolder,audioname));
              
             [class, guitar, dantranh, piano] = counting(model.predict(feature));
@@ -20,19 +21,9 @@ function test(numberOfNeighbors)
             t.Dantranh = dantranh.count;
             t.Piano = piano.count;
             t.Predict = class;
-           
+            t.Actual = audioclass;
             predictTable = [predictTable;t];
         end
     end
-    
-%     function [edm, pop, piano, rock] = counting(result)
-%         edm = sum(count(result,"EDM"));
-%         pop = sum(count(result,"Pop"));
-%         piano = sum(count(result,"Piano"));
-%         rock = sum(count(result,"Rock"));
-%         
-%         
-%         
-%     end
-    disp("done")
+    disp(predictTable)
 end
